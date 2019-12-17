@@ -1,0 +1,30 @@
+{
+  "name": "wepy-demo",
+  "version": "0.0.2",
+  "description": "A WePY project",
+  "main": "weapp/app.js",
+  "scripts": {
+    "dev": "./node_modules/.bin/wepy build --watch",
+    "build": "cross-env NODE_ENV=production ./node_modules/.bin/wepy build --no-cache",
+    "clean": "rm -rf weapp",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "罗彦鹏 <rockinges@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@wepy/core": "^2.0.0-alpha.9",
+    "@wepy/x": "^2.0.2",
+    "miniprogram-slide-view": "0.0.3",
+    "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@wepy/babel-plugin-import-regenerator": "0.0.2",
+    "@wepy/cli": "^2.0.0-alpha.22",
+    "@wepy/compiler-babel": "^2.0.1",
+    "@wepy/compiler-sass": "^2.0.2",
+    "babel-eslint": "^7.2.1",
+    "cross-env": "^5.1.3"
+  }
+}

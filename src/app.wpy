@@ -1,0 +1,27 @@
+<style lang="scss">
+</style>
+
+<script>
+import wepy from '@wepy/core';
+
+wepy.app({
+  onLaunch() {
+    console.log('on launch');
+  }
+});
+</script>
+<config>
+{
+  pages: [
+    'pages/index'
+  ],
+  window: {
+    backgroundTextStyle: 'light',
+    navigationBarBackgroundColor: '#fff',
+    navigationBarTitleText: 'WeChat',
+    navigationBarTextStyle: 'black'
+  },
+  usingComponents: {
+  }
+}
+</config>

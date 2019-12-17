@@ -1,0 +1,50 @@
+<style type="scss">
+</style>
+<template>
+  <div class="container">
+    <div class="time">{{formatedTime}} {{type}} {{amount}}毫升 {{remark}}</div>
+  </div>
+</template>
+<script>
+import wepy from '@wepy/core';
+import { timeFormat } from '@/common/utils';
+
+wepy.component({
+  props: {
+    info: {
+      type: Object,
+      default: {
+        time: 0,
+        type: '', 
+        amount: 0, 
+        remark: '',
+      },
+    }
+    // time: Number,
+    // type: String,
+    // amount: Number,
+    // remark: String,
+  },
+  data: {
+    time: 0,
+    type: '', 
+    amount: 0, 
+    remark: '',
+  },
+  computed: {
+    formatedTime() {
+      return timeFormat(this.time);
+    }
+  },
+  methods: {},
+  created() {
+  },
+  attached() {
+    Object.assign(this, this.info);
+  },
+  ready() {
+    console.log(this);
+    
+  }
+});
+</script>

@@ -1,0 +1,34 @@
+<style lang="scss">
+</style>
+
+<template>
+  <recordItem :info="recordItem"/>
+  <button></button>
+</template>
+  
+<script>
+import wepy from '@wepy/core';
+
+wepy.page({
+  data: {
+    recordItem: {
+      time: 1576559910000, //1:18
+      type: '母乳',
+      amount: 100,
+      remark: '',
+    }
+  },
+
+  methods: {},
+
+  created() {}
+});
+</script>
+<config>
+{
+  navigationBarTitleText: '喂养记录',
+  usingComponents: {
+    'recordItem': '~@/components/recordItem'
+  }
+}
+</config>
