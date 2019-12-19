@@ -14,7 +14,8 @@ module.exports = {
     modules: ['node_modules']
   },
   compilers: {
-    sass: {},
+    pug: {},
+    scss: {},
     babel: {
       sourceMap: true,
       presets: [

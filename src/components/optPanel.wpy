@@ -1,0 +1,53 @@
+<style type="scss">
+</style>
+<template lang="pug">
+  input(
+    type='number'
+    placeholder='输入数量（毫升）'
+    v-model='amount'
+  )
+  textarea(
+    v-model='remark'
+    placeholder='填写备注'
+  )
+  button(@tap='addRecord') 添加记录
+</template>
+<script>
+import wepy from '@wepy/core';
+import { addRecord, updateRecord } from '@/common/api';
+wepy.component({
+  props: {},
+  data: {
+    amount: null,
+    remark: null,
+  },
+  computed: {},
+  methods: {
+    async addRecord() {
+      let {amount, remark} = this;
+      if (!amount) {
+        wx.showToast({
+          icon: "none",
+          title: '数量还没填哦～'
+        });
+        return
+      }
+      if (!remark) {
+        remark = '';
+      }
+      const result = await addRecord({time: Date.now(), amount, remark});
+      this.amount = null;
+      this.remark = null;
+      this.$emit('record-added');
+    }
+  },
+  created() {},
+  attached() {},
+  ready() {}
+});
+</script>
+<config>
+{
+
+}
+</config>

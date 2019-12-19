@@ -1,0 +1,100 @@
+<style type="scss">
+.list-wapper {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.foot {
+  height: 200rpx;
+}
+</style>
+<template lang="pug">
+  .list-wapper
+    recordDay.day(
+      v-for='records in list'
+      :date='records.yearMonthDay'
+      :records='records.data'
+      :scrollTop.sync='scrollTop'
+    )
+</template>
+<script>
+import wepy from '@wepy/core';
+import { getRecordList, getAllRecord } from '@/common/api';
+import { getYearMonthDay } from '@/common/utils';
+const spliteList = data =>
+  data
+    .map(record => Object.assign(record, {yearMonthDay: getYearMonthDay(record.time).toString()}))
+    .reduce((result, current) => {
+      const existed = result.map(x => x.yearMonthDay);
+      const yearMonthDay = current.yearMonthDay;
+      const index = existed.indexOf(yearMonthDay);
+
+      if (index === -1) {
+        result.push({
+          yearMonthDay,
+          data: [current]
+        });
+      } else {
+        result[index].data.push(current);
+      }
+
+      return result;
+    }, []);
+  
+wepy.component({
+  props: {
+    scrollTop: {
+      type: Number,
+      default: 0
+    }
+  },
+  data: {
+    rawRecords: [],
+    page: 1,
+    hasMore: true,
+  },
+  computed: {
+    list() {
+      if (!this.rawRecords) return [];
+      return spliteList(this.rawRecords);
+    }
+  },
+  methods: {
+    async loadData() {
+      const { page, hasMore } = this;
+      if (!hasMore) return;
+      const data = (await getRecordList(page)) || [];
+      if (data.length < 20 ) this.hasMore = false;
+      if ( page === 1 ) {
+        this.rawRecords = data;
+      } else {
+        this.rawRecords = this.rawRecords.concat(data);
+      }
+      this.page = page + 1;
+      wx.pageScrollTo({
+        scrollTop: 5000000,
+        // selector: '.add',
+        duration: 0,
+        success: (res) => {
+          console.log(res, 'pageScrollTo success');
+          
+        }
+      })
+    },
+    async reFresh() {
+      this.page = 1;
+      this.hasMore = true;
+      this.loadData();
+    }
+  },
+  attached() {
+    this.loadData();
+  }
+});
+</script>
+<config>
+{
+  usingComponents: {
+    'recordDay': '~@/components/recordDay'
+  }
+}
+</config>

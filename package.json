@@ -23,6 +23,7 @@
     "@wepy/babel-plugin-import-regenerator": "0.0.2",
     "@wepy/cli": "^2.0.0-alpha.22",
     "@wepy/compiler-babel": "^2.0.1",
+    "@wepy/compiler-pug": "https://github.com/Riant/wepy2-compiler-pug.git#master",
     "@wepy/compiler-sass": "^2.0.2",
     "babel-eslint": "^7.2.1",
     "cross-env": "^5.1.3"

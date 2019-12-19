@@ -3,10 +3,46 @@
 
 <script>
 import wepy from '@wepy/core';
+import common from '@/common';
+const initCloud = function() {
+  wx.cloud.init({
+    env: 'release-qmbz4',
+    traceUser: true
+  });
+};
+const syncData = async function() {
+  const spliteList = data => {
+    return data
+      .map(record => {
+        record.yearMonthDay = common.utils.getYearMonthDay(record.time).toString();
+        return record;
+      })
+      .reduce((result, current) => {
+        const existed = result.map(x => x.yearMonthDay);
+        const yearMonthDay = current.yearMonthDay;
+        const index = existed.indexOf(yearMonthDay);
+
+        if (index === -1) {
+          result.push({
+            yearMonthDay,
+            data: [current]
+          });
+        } else {
+          result[index].data.push(current);
+        }
+
+        return result;
+      }, []);
+  };
+  const data = await common.api.getRecordList();
+  const list = spliteList(data);
+  wx.setStorageSync('list', list);
+};
 
 wepy.app({
   onLaunch() {
-    console.log('on launch');
+    initCloud();
+    syncData()
   }
 });
 </script>

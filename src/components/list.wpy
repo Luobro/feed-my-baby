@@ -1,0 +1,19 @@
+<style type="scss">
+</style>
+<template lang="pug">
+</template>
+<script>
+import wepy from '@wepy/core';
+wepy.component({
+  props: {},
+  data: {
+    list: [],
+    page: 1,
+    hasMore: true,
+  },
+  methods: {},
+});
+</script>
+<config>
+{}
+</config>

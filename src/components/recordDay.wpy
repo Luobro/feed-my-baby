@@ -1,0 +1,93 @@
+<style type="scss">
+.fixed {
+  position: fixed;
+  top: 0;
+}
+.title {
+  width: 100%;
+  height: 120rpx;
+  background-color: red;
+}
+.space-holder{
+  height: 120rpx;
+}
+.list-wapper{
+  display: flex;
+  flex-direction: column-reverse;
+}
+</style>
+<template lang="pug">
+  .warpper
+    .title(:class="{'fixed': isFixed}")
+      .date {{dateString}}
+      .total {{total}}ml
+    div(:class="{'space-holder': isFixed}")
+    .list-wapper
+      recordItem.recordItem(
+        v-for='item in records'
+        :info='item'
+        :time='item.time'
+        :class="{'anchor': isAnchor}"
+      )
+</template>
+<script>
+import wepy from '@wepy/core';
+wepy.component({
+  props: {
+    records: {
+      type: Array,
+      default: [{}]
+    },
+    date: {
+      type: String,
+      default: ''
+    },
+    scrollTop: {
+      type: Number,
+      default: 0,
+    },
+    date: String,
+  },
+  data: {
+    isFixed: false,
+    index: -1,
+    isAnchor: false,
+  },
+  watch: {
+    scrollTop (scrollTop) {
+      const query = wx.createSelectorQuery().in(this.$wx);
+      query.select('.warpper').boundingClientRect((res)=>{        
+        if( res ){
+          const { top, height } = res;
+          if (top < 0 && height + top > 0) {
+            this.isFixed = true;
+          } else {
+            this.isFixed = false;
+          }
+        }
+      }).exec()
+    }
+  },
+  computed: {
+    total() {
+      return this.records
+        .map(record => record.amount)
+        .reduce((acc, cur) => +acc + +cur, 0);
+    },
+    dateString() {
+      return this.date
+    }
+  },
+  methods: {
+    
+  },
+  attached() {}
+});
+</script>
+<config>
+{
+  usingComponents: {
+    'recordItem': '~@/components/recordItem'
+  }
+}
+</config>
