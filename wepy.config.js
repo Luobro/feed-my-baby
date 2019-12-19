@@ -15,7 +15,7 @@ module.exports = {
   },
   compilers: {
     pug: {},
-    scss: {},
+    sass: {},
     babel: {
       sourceMap: true,
       presets: [

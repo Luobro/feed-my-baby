@@ -1,0 +1,27 @@
+// color
+$ColorPrimary: #07C160;
+$ColorWarn: #FA5151;
+
+// active mask
+$ActiveMaskWhite:rgba(0,0,0,.05);
+$ActiveMaskColored:rgba(0,0,0,.1);
+$ActiveMaskBlack:rgba(0,0,0,.15);
+
+// link
+$LinkColorDefault: #576B95;
+
+// background
+$BgColorDefault: #EDEDED;
+$BgColorPrimary: #F7F7F7;
+$BgColorActive: #ECECEC;
+
+// line
+$LineColorLight: rgba(0,0,0,.1);
+$LineColorDark: rgba(0,0,0,.3);
+
+// text
+$TextColorTitle: rgba(0,0,0,.9);
+$TextColorDesc: rgba(0,0,0,.5);
+$TextColorTips: rgba(0,0,0,.3);
+$TextColorWarn: $ColorWarn;
+

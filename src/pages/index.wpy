@@ -1,9 +1,32 @@
 <style lang="scss">
+.foot {
+  height: 400rpx;
+}
+.btn-container {
+  position: fixed;
+  justify-content: center;
+  display: flex;
+  bottom: 100rpx;
+  width: 100%;
+  .add {
+    height: 120rpx;
+    width: 240rpx;
+    line-height: 120rpx;
+    border-radius: 60rpx;
+    background-color: red;
+    color: white;
+    text-align: center;
+  }
+}
+
 </style>
 
 <template lang="pug">
   recordList(:scrollTop.sync='scrollTop')
-  optPanel(@record-added='onRecordAdded')
+  .foot
+  .btn-container
+    .add(@tap='add') 添加记录
+  addPanel(@record-added='onRecordAdded')
 </template>
   
 <script>
@@ -15,6 +38,10 @@ wepy.page({
   },
   methods: {
     add() {
+      const panel = this.$children.find(
+        com => com.$is === 'components/addPanel'
+      );
+      panel.triggerShow();
       console.log('add');
     },
     async onRecordAdded() {
@@ -44,7 +71,7 @@ wepy.page({
   navigationBarTitleText: '喂养记录',
   usingComponents: {
     'recordList': '~@/components/recordList',
-    'optPanel': '~@/components/optPanel'
+    'addPanel': '~@/components/addPanel'
   },
   enablePullDownRefresh: true,
   backgroundTextStyle: 'dark'

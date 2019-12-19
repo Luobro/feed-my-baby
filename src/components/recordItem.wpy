@@ -1,4 +1,4 @@
-<style type="scss">
+<style lang='scss'>
 </style>
 <template lang="pug">
   .container

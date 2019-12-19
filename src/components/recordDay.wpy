@@ -1,12 +1,25 @@
-<style type="scss">
+<style lang='scss'>
 .fixed {
   position: fixed;
   top: 0;
 }
 .title {
+  box-sizing: border-box;
   width: 100%;
   height: 120rpx;
-  background-color: red;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12rpx 24rpx;
+  .date {
+    font-size: 32rpx;
+    font-weight: bold;
+  }
+  .total {
+    font-size: 24rpx;
+    color: rgba(0,0,0,.9);
+  }
 }
 .space-holder{
   height: 120rpx;
@@ -75,7 +88,12 @@ wepy.component({
         .reduce((acc, cur) => +acc + +cur, 0);
     },
     dateString() {
-      return this.date
+      if(this.date) {
+        const [year, month, day] = this.date.split(',');
+        return `${year}年${month}月${day}日`
+      }
+      return '载入中...';
+
     }
   },
   methods: {

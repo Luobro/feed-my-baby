@@ -1,10 +1,10 @@
-<style type="scss">
+<style lang='scss'>
 .list-wapper {
   display: flex;
   flex-direction: column-reverse;
 }
 .foot {
-  height: 200rpx;
+  height: 20rpx;
 }
 </style>
 <template lang="pug">
@@ -15,6 +15,7 @@
       :records='records.data'
       :scrollTop.sync='scrollTop'
     )
+  .foot
 </template>
 <script>
 import wepy from '@wepy/core';
@@ -22,7 +23,11 @@ import { getRecordList, getAllRecord } from '@/common/api';
 import { getYearMonthDay } from '@/common/utils';
 const spliteList = data =>
   data
-    .map(record => Object.assign(record, {yearMonthDay: getYearMonthDay(record.time).toString()}))
+    .map(record =>
+      Object.assign(record, {
+        yearMonthDay: getYearMonthDay(record.time).toString()
+      })
+    )
     .reduce((result, current) => {
       const existed = result.map(x => x.yearMonthDay);
       const yearMonthDay = current.yearMonthDay;
@@ -39,7 +44,7 @@ const spliteList = data =>
 
       return result;
     }, []);
-  
+
 wepy.component({
   props: {
     scrollTop: {
@@ -50,7 +55,7 @@ wepy.component({
   data: {
     rawRecords: [],
     page: 1,
-    hasMore: true,
+    hasMore: true
   },
   computed: {
     list() {
@@ -62,23 +67,21 @@ wepy.component({
     async loadData() {
       const { page, hasMore } = this;
       if (!hasMore) return;
-      const data = (await getRecordList(page)) || [];
-      if (data.length < 20 ) this.hasMore = false;
-      if ( page === 1 ) {
+      const data = (await getAllRecord(page)) || [];
+      if (data.length < 20) this.hasMore = false;
+      if (page === 1) {
         this.rawRecords = data;
       } else {
         this.rawRecords = this.rawRecords.concat(data);
       }
       this.page = page + 1;
-      wx.pageScrollTo({
-        scrollTop: 5000000,
-        // selector: '.add',
-        duration: 0,
-        success: (res) => {
-          console.log(res, 'pageScrollTo success');
-          
-        }
-      })
+      wx.nextTick(() => {
+        wx.pageScrollTo({
+          scrollTop: 5000000,
+          // selector: '.foot',
+          duration: 0,
+        });
+      });
     },
     async reFresh() {
       this.page = 1;
