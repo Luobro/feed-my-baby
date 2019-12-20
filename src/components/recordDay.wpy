@@ -1,8 +1,5 @@
 <style lang='scss'>
-.fixed {
-  position: fixed;
-  top: 0;
-}
+@import "~@/style/style.scss";
 .title {
   box-sizing: border-box;
   width: 100%;
@@ -12,30 +9,40 @@
   justify-content: space-between;
   align-items: center;
   padding: 12rpx 24rpx;
+  border: 1px solid $LineColorLight;
   .date {
     font-size: 32rpx;
     font-weight: bold;
+    color: $TextColorTitle;
   }
   .total {
-    font-size: 24rpx;
-    color: rgba(0,0,0,.9);
+    font-size: 28rpx;
+    color: $TextColorTitle;
+    .total-number {
+      color: $ColorPrimary;
+    }
   }
+}
+.fixed {
+  position: fixed;
+  top: 0;
+  border-top-color: rgba(0, 0, 0, 0);
 }
 .space-holder{
   height: 120rpx;
 }
-.list-wapper{
+.list-wrapper{
   display: flex;
   flex-direction: column-reverse;
 }
 </style>
 <template lang="pug">
-  .warpper
+  .wrapper
     .title(:class="{'fixed': isFixed}")
       .date {{dateString}}
-      .total {{total}}ml
+      .total 合计 <text class="total-number">{{total}}</text> 毫升
     div(:class="{'space-holder': isFixed}")
-    .list-wapper
+    .list-wrapper
       recordItem.recordItem(
         v-for='item in records'
         :info='item'
@@ -69,9 +76,10 @@ wepy.component({
   watch: {
     scrollTop (scrollTop) {
       const query = wx.createSelectorQuery().in(this.$wx);
-      query.select('.warpper').boundingClientRect((res)=>{        
+      query.select('.wrapper').boundingClientRect((res)=>{        
         if( res ){
           const { top, height } = res;
+          
           if (top < 0 && height + top > 0) {
             this.isFixed = true;
           } else {
@@ -93,13 +101,13 @@ wepy.component({
         return `${year}年${month}月${day}日`
       }
       return '载入中...';
-
     }
   },
   methods: {
-    
+
   },
-  attached() {}
+  attached() {
+  }
 });
 </script>
 <config>

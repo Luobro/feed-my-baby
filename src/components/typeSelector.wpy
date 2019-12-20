@@ -1,0 +1,62 @@
+<style lang="scss">
+@import "~@/style/style.scss";
+.type-list {
+  display: flex;
+  .type-item{
+    box-sizing: border-box;
+    height: 64rpx;
+    font-size:24rpx;
+    line-height: 64rpx;
+    border: 2rpx solid $LineColorDark;
+    border-radius: 32rpx;
+    padding: 0rpx 16rpx;
+    margin-right: 18rpx;
+    color: $TextColorTips;
+  }
+  .isSelected{
+    color: red;
+    border-color: red;
+  }
+}
+</style>
+<template lang="pug">
+  .type-list
+    .type-item(
+      v-for='type in types'
+      class="{{type == selected ? 'isSelected' : ''}}"
+      @tap='changeType'
+      data-type="{{type}}"
+    ) {{type}}
+</template>
+<script>
+import wepy from '@wepy/core';
+wepy.component({
+  props: ['selected'],
+  data: {
+    types: [
+      '配方奶',
+      '瓶喂母乳',
+      '亲喂母乳',
+    ],
+    // selected: '配方奶',
+  },
+  methods: {
+    changeType(event) {
+      const { type } = event.currentTarget.dataset;
+      this.selected = type;
+    }
+  },
+  watch: {
+    selected(newVal, oldVal) {
+      console.log(`selected 发生变化: ${oldVal} => ${newVal}`);
+      
+      this.$emit('type-changed', newVal)
+    }
+  },
+  detached() {
+  }
+});
+</script>
+<config>
+{}
+</config>

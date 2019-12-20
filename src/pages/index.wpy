@@ -18,15 +18,19 @@
     text-align: center;
   }
 }
-
 </style>
 
 <template lang="pug">
   recordList(:scrollTop.sync='scrollTop')
   .foot
   .btn-container
-    .add(@tap='add') 添加记录
-  addPanel(@record-added='onRecordAdded')
+    .add(@tap='triggerAddPanel') 添加记录
+  addPanel(
+    :show='addPanelShow'
+    @record-added='onRecordAdded'
+    @trigger-show='triggerAddPanel'
+  )
+  editPanel
 </template>
   
 <script>
@@ -34,46 +38,45 @@ import wepy from '@wepy/core';
 
 wepy.page({
   data: {
-    scrollTop: 0
+    scrollTop: 0,
+    addPanelShow: false,
   },
   methods: {
-    add() {
-      const panel = this.$children.find(
-        com => com.$is === 'components/addPanel'
-      );
-      panel.triggerShow();
-      console.log('add');
+    triggerAddPanel() {
+      this.addPanelShow = !this.addPanelShow;
     },
     async onRecordAdded() {
       const recordListCom = this.$children.find(
         com => com.$is === 'components/recordList'
       );
       await recordListCom.reFresh();
-    }
+    },
+
   },
   onLoad() {
+    
   },
   onPageScroll(event) {
     this.scrollTop = event.scrollTop;
   },
   async onPullDownRefresh() {
-    console.log('onPullDownRefresh');
-    const recordListCom = this.$children.find(
-      com => com.$is === 'components/recordList'
-    );
-    await recordListCom.loadData();
-    wx.stopPullDownRefresh( )
+    // const recordListCom = this.$children.find(
+    //   com => com.$is === 'components/recordList'
+    // );
+    // await recordListCom.loadData();
+    // wx.stopPullDownRefresh( )
   }
 });
 </script>
 <config>
 {
-  navigationBarTitleText: '喂养记录',
+  navigationBarTitleText: '喂奶记录',
   usingComponents: {
     'recordList': '~@/components/recordList',
-    'addPanel': '~@/components/addPanel'
+    'addPanel': '~@/components/addPanel',
+    'editPanel': '~@/components/editPanel'
   },
-  enablePullDownRefresh: true,
+  enablePullDownRefresh: false,
   backgroundTextStyle: 'dark'
 }
 </config>

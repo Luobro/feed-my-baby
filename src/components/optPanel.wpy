@@ -1,0 +1,53 @@
+<style lang="scss">
+@import "~@/style/style.scss";
+.container {
+  width: 100%;
+  height: 100%;
+  .back-panel {
+    box-sizing: border-box;
+    width: 100%;
+    height: 80%;
+    background-color: white;
+    position: fixed;
+    bottom: 0;
+    z-index: 2;
+    border-top-left-radius: 48rpx;
+    border-top-right-radius: 48rpx;
+    padding: 48rpx;
+  }
+  .modal {
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background-color: $ActiveMaskBlack;
+  }
+}
+</style>
+<template lang="pug">
+.container(v-if='show' catchtouchmove='')
+  .modal(@tap="$emit('trigger-show')")
+  .back-panel
+    slot
+</template>
+<script>
+import wepy from '@wepy/core';
+wepy.component({
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data: {
+  },
+  watch: {
+  },
+  methods: {
+  }
+});
+</script>
+<config>
+{}
+</config>

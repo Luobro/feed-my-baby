@@ -1,8 +1,59 @@
 <style lang='scss'>
+@import '~@/style/style.scss';
+.container {
+  box-sizing: border-box;
+  padding: 32rpx;
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .left {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .amount {
+      display: flex;
+      text-align: right;
+      min-width: 76rpx;
+      font-size: 64rpx;
+      line-height: 42rpx;
+    }
+    .type {
+      font-size: 24rpx;
+      margin-right: 16rpx;
+      color: $TextColorTips;
+    }
+    .unit {
+      font-size: 24rpx;
+      color: $TextColorTips;
+    }
+  }
+  .bottom {
+    margin-top: 16rpx;
+    font-size: 28rpx;
+    color: $TextColorDesc;
+    padding: 24rpx;
+    background-color: $ActiveMaskWhite;
+    border-radius: 32rpx;
+  }
+}
 </style>
 <template lang="pug">
-  .container
-    .time {{formatedTime}} {{info.type}} {{info.amount}}毫升 {{info.remark}} {{obj.a}}
+.container(@tap='tapRecordItem')
+  .top
+    .left
+      .time {{formatedTime}}
+      .type {{info.type}}
+    .right
+      .amount {{info.amount}}
+      .unit 毫升
+  .bottom(v-if='info.remark') {{info.remark}}
 </template>
 <script>
 import wepy from '@wepy/core';
@@ -25,7 +76,11 @@ wepy.component({
       return timeFormat(this.time);
     }
   },
-  methods: {},
+  methods: {
+    tapRecordItem() {
+      this.$app.$bus.$emit('tap-record-item', this.info);
+    }
+  },
   created() {},
   attached() {},
   ready() {}

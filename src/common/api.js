@@ -7,7 +7,7 @@ try {
 } catch (error) {
   if (error.errCode === -1) {
     wx.cloud.init({
-      env: 'release-qmbz4',
+      env: 'release-r3j3z',
       traceUser: true
     });
     db = wx.cloud.database();
@@ -64,7 +64,7 @@ export async function getRecordList(page = 1) {
   return data;
 }
 
-export async function addRecord({ time, type = '奶瓶', amount = 100, remark = '' }) {
+export async function addRecord({ time, type = '配方奶', amount = 100, remark = '' }) {
   console.log(type);
 
   return await db.collection('record').add({

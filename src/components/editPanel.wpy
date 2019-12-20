@@ -1,4 +1,4 @@
-<style lang='scss'>
+<style lang="scss">
 @import '~@/style/style.scss';
 .opt-bar {
   display: flex;
@@ -24,7 +24,7 @@
 <template lang="pug">
 optPanel(
   :show='show'
-  @trigger-show="$emit('trigger-show')"
+  @trigger-show="triggerShow"
 )
   .opt-bar
     picker(
@@ -55,58 +55,32 @@ optPanel(
 </template>
 <script>
 import wepy from '@wepy/core';
-import { addRecord, updateRecord } from '@/common/api';
-import { timeFormat, moment } from '@/common/utils';
 import typeSelector from '@/mixin/typeSelectorOwner';
 wepy.component({
   mixins: [typeSelector],
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    }
-  },
+  props: {},
   data: {
+    show: false,
     date: '',
-    time: moment(new Date()).format('hh:mm'),
+    time: '',
     amount: null,
     remark: null
   },
-  computed: {
-    displayTime() {},
-    displayDate() {}
-  },
   methods: {
-    async addRecord() {
-      let { amount, remark, type } = this;
-      if (!amount) {
-        wx.showToast({
-          icon: 'none',
-          title: '数量还没填哦～'
-        });
-        return;
+    triggerShow(info) {
+      if(info) {
+        console.log(info);
+        this.date = info.date;
+        this.amount = info.amount;
+        this.remark = info.remark;
+        this.type = info.type;
       }
-      if (!remark) {
-        remark = '';
-      }
-      const result = await addRecord({
-        time: Date.now(),
-        amount,
-        remark,
-        type
-      });
-      this.amount = null;
-      this.remark = null;
-      this.time = moment(new Date()).format('hh:mm');
-      this.$emit('record-added');
-      this.$emit('trigger-show');
-    },
-    resetParams() {
-      
+      this.show = !this.show;
     }
   },
-  created() {},
-  attached() {},
+  attached() {
+    this.$app.$bus.$on('tap-record-item', this.triggerShow.bind(this));
+  },
   ready() {}
 });
 </script>

@@ -49,3 +49,5 @@ export const getDateScope = (...args) => {
 
   return getDateScope(year, month, day)
 }
+
+export { moment }

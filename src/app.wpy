@@ -6,7 +6,7 @@ import wepy from '@wepy/core';
 import common from '@/common';
 const initCloud = function() {
   wx.cloud.init({
-    env: 'release-qmbz4',
+    env: 'release-r3j3z',
     traceUser: true
   });
 };
@@ -41,6 +41,10 @@ const syncData = async function() {
 
 wepy.app({
   onLaunch() {
+    this.$common = common;
+    this.$api = common.api;
+    this.$utils = common.utils;
+    this.$bus = common.bus;
     initCloud();
     syncData()
   }
