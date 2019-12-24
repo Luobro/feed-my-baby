@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "@wepy/core": "^2.0.0-alpha.9",
-    "@wepy/x": "^2.0.2",
+    "@wepy/x": "^2.0.3",
     "miniprogram-slide-view": "0.0.3",
     "moment": "^2.24.0"
   },

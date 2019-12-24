@@ -50,7 +50,7 @@ wepy.component({
     selected(newVal, oldVal) {
       console.log(`selected 发生变化: ${oldVal} => ${newVal}`);
       
-      this.$emit('type-changed', newVal)
+      this.$emit('update:type', newVal)
     }
   },
   detached() {

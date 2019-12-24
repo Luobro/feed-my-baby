@@ -27,7 +27,6 @@
     .add(@tap='triggerAddPanel') 添加记录
   addPanel(
     :show='addPanelShow'
-    @record-added='onRecordAdded'
     @trigger-show='triggerAddPanel'
   )
   editPanel
@@ -35,27 +34,20 @@
   
 <script>
 import wepy from '@wepy/core';
-
+import store from '@/store';
 wepy.page({
   data: {
     scrollTop: 0,
     addPanelShow: false,
+
   },
   methods: {
     triggerAddPanel() {
-      this.addPanelShow = !this.addPanelShow;
-    },
-    async onRecordAdded() {
-      const recordListCom = this.$children.find(
-        com => com.$is === 'components/recordList'
-      );
-      await recordListCom.reFresh();
-    },
-
+      this.$bus.$emit('trigger:addPanel');
+      console.log("this.$bus.$emit('trigger:addPanel')");
+    }
   },
-  onLoad() {
-    
-  },
+  onLoad() {},
   onPageScroll(event) {
     this.scrollTop = event.scrollTop;
   },

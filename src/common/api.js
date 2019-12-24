@@ -77,7 +77,7 @@ export async function addRecord({ time, type = '配方奶', amount = 100, remark
   })
 }
 
-export async function updateRecord({ id, time, type = '奶瓶', amount = 100, remark = '' }) {
+export async function updateRecord({ id, time, type = '', amount = 1, remark = '' }) {
   return await db.collection('record')
     .doc(id)
     .update({

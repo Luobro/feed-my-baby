@@ -1,85 +1,58 @@
 <style lang="scss">
 @import '~@/style/style.scss';
-.opt-bar {
-  display: flex;
-  justify-content: space-between;
-  .add-btn {
-    font-size: 32rpx;
-    font-weight: bold;
-    color: $ColorPrimary;
-    padding-bottom: 32rpx;
-  }
-}
-.amount {
-  height: 128rpx;
-  font-size: 64rpx;
-}
-.remark {
-  padding-bottom: 32rpx;
-}
-.input-placeholder {
-  color: $TextColorTips;
-}
 </style>
 <template lang="pug">
 optPanel(
-  :show='show'
-  @trigger-show="triggerShow"
+  :show='show',
+  :amount='amount'
+  :remark='remark'
+  :type='type'
+  :time='time'
+  @update:amount='updateAmount'
+  @update:remark='updateRemark'
+  @update:time='updateTime'
+  @update:type='updateType'
+  @trigger:show='triggerShow'
 )
-  .opt-bar
-    picker(
-      mode='time'
-      v-model='time'
-    ) {{time}}修改时间
-    .add-btn(@tap='addRecord') 确定添加
-  input.amount(
-    type='number'
-    placeholder='输入毫升数'
-    v-model='amount'
-    placeholder-class='input-placeholder'
-    maxlength='3'
-    adjust-position
-    focus
-  )
-  input.remark(
-    v-model='remark'
-    placeholder='填写备注'
-    placeholder-class='input-placeholder'
-    maxlength='400'
-    adjust-position
-  )
-  typeSelector(
-    :selected='type'
-    @type-changed='onTypeChanged'
-  )
+  div 删除
+  .btn(@tap='editRecord') 修改
 </template>
 <script>
 import wepy from '@wepy/core';
-import typeSelector from '@/mixin/typeSelectorOwner';
+import optPanelOwner from '@/mixin/optPanelOwner'
 wepy.component({
-  mixins: [typeSelector],
+  mixins: [optPanelOwner],
   props: {},
   data: {
-    show: false,
-    date: '',
-    time: '',
-    amount: null,
-    remark: null
+    show: true,
+    // time: '',
+    // amount: null,
+    // remark: null, 
+    // type: '配方奶'
   },
+  computed: {},
   methods: {
     triggerShow(info) {
-      if(info) {
-        console.log(info);
-        this.date = info.date;
+      if (info) {
+        this.time = info.time;
         this.amount = info.amount;
         this.remark = info.remark;
         this.type = info.type;
+        this.id = info._id;
+        this.originInfo = info;
       }
       this.show = !this.show;
+    },
+    async editRecord() {
+      const { id, time, amount, remark, type } = this;
+      const result = await this.$api.updateRecord({ id, time, amount, remark, type });
+      console.log('editRecord', result);
+      this.$bus.$emit('refresh:list');
+      this.triggerShow();
     }
   },
   attached() {
-    this.$app.$bus.$on('tap-record-item', this.triggerShow.bind(this));
+    this.$bus.$on('trigger:editPanel', this.triggerShow.bind(this))
   },
   ready() {}
 });
@@ -88,7 +61,6 @@ wepy.component({
 {
   usingComponents: {
     'optPanel': '~@/components/optPanel',
-    'typeSelector': '~@/components/typeSelector',
   }
 }
 </config>

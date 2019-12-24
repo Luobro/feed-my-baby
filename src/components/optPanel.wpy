@@ -14,6 +14,29 @@
     border-top-left-radius: 48rpx;
     border-top-right-radius: 48rpx;
     padding: 48rpx;
+    .opt-bar {
+      display: flex;
+      justify-content: flex-end;
+      height: 64rpx;
+    }
+    .time {
+      color: $TextColorTips;
+    }
+    .time-edit {
+      padding-left: 16rpx;
+      color: $LinkColorDefault
+    }
+    .amount {
+      height: 128rpx;
+      font-size: 64rpx;
+      padding: 16rpx 0;
+    }
+    .remark {
+      padding-bottom: 32rpx;
+    }
+    .input-placeholder {
+      color: $TextColorTips;
+    }
   }
   .modal {
     position: fixed;
@@ -27,9 +50,37 @@
 </style>
 <template lang="pug">
 .container(v-if='show' catchtouchmove='')
-  .modal(@tap="$emit('trigger-show')")
+  .modal(@tap="$emit('trigger:show')")
   .back-panel
-    slot
+    .opt-bar
+      slot
+    picker(
+      mode='time'
+    )
+      text.time {{timeString}}
+      text.time-edit 设置
+    input.amount(
+      value='{{amount}}'
+      bindinput='updateAmount'
+      type='number'
+      placeholder='输入毫升数'
+      placeholder-class='input-placeholder'
+      maxlength='3'
+      adjust-position
+      focus
+    )
+    input.remark(
+      value='{{remark}}'
+      bindinput='updateRemark'
+      placeholder='填写备注'
+      placeholder-class='input-placeholder'
+      maxlength='400'
+      adjust-position
+    )
+    typeSelector(
+      :selected='type'
+      @update:type='updateType'
+    )
 </template>
 <script>
 import wepy from '@wepy/core';
@@ -38,16 +89,68 @@ wepy.component({
     show: {
       type: Boolean,
       default: false
+    },
+    time: {
+      type: Number,
+      default: 0
+    },
+    amount: {
+      type: undefined,
+      default: null,
+    },
+    remark: {
+      type: undefined,
+      default: null,
+    },
+    type: {
+      type: String,
+      default: '配方奶'
     }
   },
   data: {
   },
+  computed: {
+    timeString() {
+      return this.$utils.moment(this.time).format('MM月DD日ahh:mm')
+    }
+  },
   watch: {
+    time(newVal) {
+      this.$emit('time-changed', newVal);
+    },
+    remark(newVal) {
+      this.$emit('remark-changed', newVal);
+    },
+    type(newVal) {
+      console.log('type-changed', newVal);
+      
+      this.$emit('type-changed', newVal);
+    }
   },
   methods: {
+    updateAmount(e) {
+      const value = e.$wx.detail.value;
+      this.$emit('update:amount', value);
+    },
+    updateRemark(e) {
+      const value = e.$wx.detail.value;
+      this.$emit('update:remark', value);
+    },
+    updateType(value) {
+      this.$emit('update:type', value);
+    },
+    triggerShow() {
+      this.$emit('trigger:show');
+    }
+  },
+  attached() {
   }
 });
 </script>
 <config>
-{}
+{
+  usingComponents: {
+    'typeSelector': '~@/components/typeSelector'
+  }
+}
 </config>

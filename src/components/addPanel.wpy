@@ -1,83 +1,41 @@
-<style lang='scss'>
+<style lang="scss">
 @import '~@/style/style.scss';
-.opt-bar {
-  display: flex;
-  justify-content: space-between;
-  .add-btn {
-    font-size: 32rpx;
-    font-weight: bold;
-    color: $ColorPrimary;
-    padding-bottom: 32rpx;
-  }
-}
-.amount {
-  height: 128rpx;
-  font-size: 64rpx;
-}
-.remark {
-  padding-bottom: 32rpx;
-}
-.input-placeholder {
-  color: $TextColorTips;
-}
 </style>
 <template lang="pug">
 optPanel(
-  :show='show'
-  @trigger-show="$emit('trigger-show')"
+  :show='show',
+  :amount='amount'
+  :remark='remark'
+  :type='type'
+  :time='time'
+  @update:amount='updateAmount'
+  @update:remark='updateRemark'
+  @update:time='updateTime'
+  @update:type='updateType'
+  @trigger:show='triggerShow'
 )
-  .opt-bar
-    picker(
-      mode='time'
-      v-model='time'
-    ) {{time}}修改时间
-    .add-btn(@tap='addRecord') 确定添加
-  input.amount(
-    type='number'
-    placeholder='输入毫升数'
-    v-model='amount'
-    placeholder-class='input-placeholder'
-    maxlength='3'
-    adjust-position
-    focus
-  )
-  input.remark(
-    v-model='remark'
-    placeholder='填写备注'
-    placeholder-class='input-placeholder'
-    maxlength='400'
-    adjust-position
-  )
-  typeSelector(
-    :selected='type'
-    @type-changed='onTypeChanged'
-  )
+  .btn(@tap='addRecord') 添加
 </template>
 <script>
 import wepy from '@wepy/core';
 import { addRecord, updateRecord } from '@/common/api';
 import { timeFormat, moment } from '@/common/utils';
-import typeSelector from '@/mixin/typeSelectorOwner';
+import optPanelOwner from '@/mixin/optPanelOwner'
+
 wepy.component({
-  mixins: [typeSelector],
+  mixins: [optPanelOwner],
   props: {
-    show: {
-      type: Boolean,
-      default: false
-    }
   },
   data: {
-    date: '',
-    time: moment(new Date()).format('hh:mm'),
-    amount: null,
-    remark: null
+    show: false,
   },
   computed: {
-    displayTime() {},
-    displayDate() {}
+
   },
   methods: {
     async addRecord() {
+      console.log('addRecord');
+      
       let { amount, remark, type } = this;
       if (!amount) {
         wx.showToast({
@@ -95,18 +53,25 @@ wepy.component({
         remark,
         type
       });
-      this.amount = null;
-      this.remark = null;
-      this.time = moment(new Date()).format('hh:mm');
-      this.$emit('record-added');
-      this.$emit('trigger-show');
+      
+      this.triggerShow();
     },
     resetParams() {
-      
+      this.amount = null;
+      this.remark = null;
+      this.time = Date.now();
+      this.type = '配方奶'
+      this.$bus.$emit('refresh:list');
+    },
+    triggerShow() {
+      this.resetParams();
+      this.show = !this.show;
     }
   },
   created() {},
-  attached() {},
+  attached() {
+    this.$bus.$on('trigger:addPanel', this.triggerShow.bind(this))
+  },
   ready() {}
 });
 </script>

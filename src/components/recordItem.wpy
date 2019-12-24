@@ -78,7 +78,8 @@ wepy.component({
   },
   methods: {
     tapRecordItem() {
-      this.$app.$bus.$emit('tap-record-item', this.info);
+      this.$bus.$emit('trigger:editPanel', this.info)
+      console.log('tap:recorditem', this.info);
     }
   },
   created() {},

@@ -4,6 +4,9 @@
 <script>
 import wepy from '@wepy/core';
 import common from '@/common';
+import Vuex from '@wepy/x';
+import storeConfig from '@/store';
+
 const initCloud = function() {
   wx.cloud.init({
     env: 'release-r3j3z',
@@ -39,14 +42,24 @@ const syncData = async function() {
   wx.setStorageSync('list', list);
 };
 
+wepy.use(Vuex);
+
 wepy.app({
   onLaunch() {
-    this.$common = common;
-    this.$api = common.api;
-    this.$utils = common.utils;
-    this.$bus = common.bus;
+    const p = Object.getPrototypeOf;
+    const root = p(p(this));
+    
+    const store = new Vuex.Store(storeConfig);
+    root.$common = common;
+    root.$api = common.api;
+    root.$utils = common.utils;
+    root.$bus = common.bus;
+    root.$store = store;
+    root.$store.$vuex = Vuex;
     initCloud();
     syncData()
+
+    this.$store.commit('increment');
   }
 });
 </script>

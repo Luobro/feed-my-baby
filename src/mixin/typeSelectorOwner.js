@@ -1,6 +1,6 @@
 export default {
   data: {
-    type: '配方奶'
+    // type: '配方奶'
   },
   methods: {
     onTypeChanged(type) {

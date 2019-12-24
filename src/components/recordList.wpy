@@ -90,6 +90,7 @@ wepy.component({
     }
   },
   attached() {
+    this.$bus.$on('refresh:list', this.reFresh.bind(this))
     this.loadData();
   }
 });
