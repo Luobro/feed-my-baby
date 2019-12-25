@@ -59,6 +59,11 @@ wepy.app({
     store.dispatch('init');
     initCloud();
     syncData()
+  },
+  async syncData() {
+    const list = await common.api.getAllRecord();
+    wx.setStorageSync('list', list);
+    this.$store.dispatch('init'); // 跟云同步后，再使出话一次
   }
 });
 </script>
