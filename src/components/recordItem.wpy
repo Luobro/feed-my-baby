@@ -14,29 +14,33 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    .top {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      .type {
+        font-size: 24rpx;
+        color: $TextColorTips;
+      }
+      .amount {
+        display: flex;
+        font-size: 42rpx;
+        line-height: 42rpx;
+      }
+      .unit {
+        font-size: 24rpx;
+        color: $TextColorTips;
+      }
+    }
+    .bottom {
+      margin-top: 16rpx;
+      font-size: 28rpx;
+      color: $TextColorDesc;
+      padding: 24rpx;
+      background-color: $ActiveMaskWhite;
+      border-radius: 32rpx;
+    }
   }
-  .amount {
-    display: flex;
-    font-size: 42rpx;
-    line-height: 42rpx;
-  }
-  .type {
-    font-size: 24rpx;
-    margin-right: 16rpx;
-    color: $TextColorTips;
-  }
-  .unit {
-    font-size: 24rpx;
-    color: $TextColorTips;
-  }
-.bottom {
-  margin-top: 16rpx;
-  font-size: 28rpx;
-  color: $TextColorDesc;
-  padding: 24rpx;
-  background-color: $ActiveMaskWhite;
-  border-radius: 32rpx;
-}
 }
 </style>
 <template lang="pug">
@@ -44,12 +48,13 @@
   .left
     .time {{formatedTime}}
   .right
-    div 喂奶
-    .type {{info.type}}
-    .amount {{info.amount}}
-    .unit 毫升
+    .top
+      .amount {{info.amount}}
+      .unit 毫升
+      .type {{info.type}}
     .bottom(v-if='info.remark') {{info.remark}}
 </template>
+
 <script>
 import wepy from '@wepy/core';
 import { timeFormat } from '@/common/utils';
@@ -73,8 +78,7 @@ wepy.component({
   },
   methods: {
     tapRecordItem() {
-      this.$bus.$emit('trigger:editPanel', this.info)
-      console.log('tap:recorditem', this.info);
+      this.$bus.$emit('trigger:editPanel', this.info);
     }
   },
   created() {},

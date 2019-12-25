@@ -48,8 +48,6 @@ wepy.component({
   },
   watch: {
     selected(newVal, oldVal) {
-      console.log(`selected 发生变化: ${oldVal} => ${newVal}`);
-      
       this.$emit('update:type', newVal)
     }
   },

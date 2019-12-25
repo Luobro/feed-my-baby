@@ -37,8 +37,7 @@ const syncData = async function() {
         return result;
       }, []);
   };
-  const data = await common.api.getRecordList();
-  const list = spliteList(data);
+  const list = await common.api.getAllRecord();
   wx.setStorageSync('list', list);
 };
 
@@ -56,10 +55,10 @@ wepy.app({
     root.$bus = common.bus;
     root.$store = store;
     root.$store.$vuex = Vuex;
+
+    store.dispatch('init');
     initCloud();
     syncData()
-
-    this.$store.commit('increment');
   }
 });
 </script>

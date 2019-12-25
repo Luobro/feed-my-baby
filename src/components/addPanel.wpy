@@ -41,9 +41,7 @@ wepy.component({
   },
   methods: {
     async addRecord() {
-      console.log('addRecord');
-      
-      let { amount, remark, type } = this;
+      let { amount, remark, type, time } = this;
       if (!amount) {
         wx.showToast({
           icon: 'none',
@@ -54,12 +52,9 @@ wepy.component({
       if (!remark) {
         remark = '';
       }
-      const result = await addRecord({
-        time: Date.now(),
-        amount,
-        remark,
-        type
-      });
+      const record = { amount, remark, type, time };
+      const index = this.$store.state.list.length;
+      this.$store.dispatch('addRecord', { index, record } );
       
       this.triggerShow();
     },

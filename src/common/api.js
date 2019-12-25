@@ -65,8 +65,6 @@ export async function getRecordList(page = 1) {
 }
 
 export async function addRecord({ time, type = '配方奶', amount = 100, remark = '' }) {
-  console.log(type);
-
   return await db.collection('record').add({
     data: {
       time,
@@ -77,9 +75,9 @@ export async function addRecord({ time, type = '配方奶', amount = 100, remark
   })
 }
 
-export async function updateRecord({ id, time, type = '', amount = 1, remark = '' }) {
+export async function updateRecord({ _id, time, type = '', amount = 1, remark = '' }) {
   return await db.collection('record')
-    .doc(id)
+    .doc(_id)
     .update({
       data: {
         time,
@@ -90,9 +88,9 @@ export async function updateRecord({ id, time, type = '', amount = 1, remark = '
     });
 }
 
-export async function deleteRecord(id) {
+export async function deleteRecord(_id) {
   return await db.collection('record')
-    .doc(id)
+    .doc(_id)
     .remove();
 }
 

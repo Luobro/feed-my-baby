@@ -26,7 +26,7 @@ optPanel(
   @trigger:show='triggerShow'
 )
   .delete(@tap='deleteRecord') 删除
-  .btn(@tap='editRecord') 修改
+  .btn(@tap='editRecord') 编辑
 </template>
 <script>
 import wepy from '@wepy/core';
@@ -35,7 +35,9 @@ wepy.component({
   mixins: [optPanelOwner],
   props: {},
   data: {
+    originRecord: {},
     show: false,
+    recordIndex: 0,
     // time: '',
     // amount: null,
     // remark: null, 
@@ -45,26 +47,46 @@ wepy.component({
   methods: {
     triggerShow(info) {
       if (info) {
-        this.time = info.time;
-        this.amount = info.amount;
-        this.remark = info.remark;
-        this.type = info.type;
-        this.id = info._id;
-        this.originInfo = info;
+        const { time, amount, remark, type, _id, _openid, recordIndex } = info;
+        this.time = time;
+        this.amount = amount;
+        this.remark = remark;
+        this.type = type;
+        this._id = _id;
+        this._openid = _openid;
+        this.recordIndex = info.recordIndex;
+
+        this.originRecord = { time, amount, remark, type, _id, _openid };
       }
       this.show = !this.show;
     },
     async editRecord() {
-      const { id, time, amount, remark, type } = this;
-      const result = await this.$api.updateRecord({ id, time, amount, remark, type });
-      console.log('editRecord', { id, time, amount, remark, type }, result);
+      const { time, amount, remark, type, _id, recordIndex } = this;
+      const record = { time, amount, remark, type, _id };
+      this.$store.dispatch('editRecord', { index: recordIndex, record } );
       this.$bus.$emit('refresh:list');
       this.triggerShow();
     },
     async deleteRecord() {
-      const { id } = this;
-      const result = await this.$api.deleteRecord(id);
-      console.log('deleteRecord', result);
+      await new Promise(resolve => {
+        wx.showModal({
+          title: '删除记录',
+          content: '此操作无法恢复哦～',
+          showCancel: true,
+          cancelText: '取消',
+          cancelColor: '#000000',
+          confirmText: '确定',
+          confirmColor: '#FA5151',
+          success: (result) => {
+            if(result.confirm){
+              resolve()
+            }
+          },
+        });
+      })
+      const { _id, recordIndex } = this;
+      
+      this.$store.dispatch('removeRecord', { index: recordIndex, id: _id } );
       this.$bus.$emit('refresh:list');
       this.triggerShow();
     }

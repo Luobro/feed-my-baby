@@ -122,8 +122,6 @@ wepy.component({
       this.$emit('update:type', value);
     },
     updateTime(value) {
-      console.log('optPanel:update:time', value);
-      
       this.$emit('update:time', value);
     },
     triggerShow() {

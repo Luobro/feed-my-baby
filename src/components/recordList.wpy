@@ -23,11 +23,13 @@ import { getRecordList, getAllRecord } from '@/common/api';
 import { getYearMonthDay } from '@/common/utils';
 const spliteList = data =>
   data
-    .map(record =>
+    .map((record, index) =>
       Object.assign(record, {
-        yearMonthDay: getYearMonthDay(record.time).toString()
+        yearMonthDay: getYearMonthDay(record.time).toString(),
+        recordIndex: index
       })
     )
+    .sort((record1, record2) => record2.time - record1.time)
     .reduce((result, current) => {
       const existed = result.map(x => x.yearMonthDay);
       const yearMonthDay = current.yearMonthDay;
@@ -59,8 +61,10 @@ wepy.component({
   },
   computed: {
     list() {
-      if (!this.rawRecords) return [];
-      return spliteList(this.rawRecords);
+      const rawRecords = this.$store.state.list;
+
+      const list = spliteList(rawRecords);
+      return list;
     }
   },
   methods: {
@@ -84,14 +88,24 @@ wepy.component({
       });
     },
     async reFresh() {
-      this.page = 1;
-      this.hasMore = true;
-      this.loadData();
+      this.list; // 触发计算属性计算
+
+      // this.page = 1;
+      // this.hasMore = true;
+      // this.loadData();
     }
   },
   attached() {
-    this.$bus.$on('refresh:list', this.reFresh.bind(this))
-    this.loadData();
+    this.$bus.$on('refresh:list', this.reFresh.bind(this));
+    // this.loadData();
+
+    wx.nextTick(() => {
+      wx.pageScrollTo({
+        scrollTop: 5000000,
+        // selector: '.foot',
+        duration: 0
+      });
+    });
   }
 });
 </script>

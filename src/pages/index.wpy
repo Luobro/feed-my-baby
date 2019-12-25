@@ -44,7 +44,6 @@ wepy.page({
   methods: {
     triggerAddPanel() {
       this.$bus.$emit('trigger:addPanel');
-      console.log("this.$bus.$emit('trigger:addPanel')");
     }
   },
   onLoad() {},

@@ -17,8 +17,7 @@ picker(
   bindcolumnchange='pickerColumnChange'
 )
   text.time {{timeString}}
-  //- text.time(v-for='index in [1,2,3,4,5,6]') {{pickerArray[index][pickerArrayIndex[index]]}}
-  text.time-edit 设置
+  text.time-edit 修改
 </template>
 <script>
 import wepy from '@wepy/core';
@@ -35,20 +34,25 @@ wepy.component({
   computed: {
     timeString() {
       const { moment, timeFormat } = this.$utils;
-      const { time } = this;
-      const diffDay = moment(time).diff(moment(new Date()), 'days');
+      const time = moment(this.time);
+      const now = moment();
+      const timeDay = time.format("YYYY-MM-DD");
+      const today = now.format("YYYY-MM-DD");
+      
+      const diffDay = moment(today).diff(moment(timeDay), 'days');
       const hourMinuteString = timeFormat(time);
-      const isSameYear = (time1, time2) => new Date(time1).getFullYear() === new Date(time2).getFullYear();
+      const isSameYear = (time1, time2) => time1.year() === time2.year();
+      
       if(diffDay === 0) {
         return hourMinuteString;
-      } else if (diffDay === -1) {
+      } else if (diffDay === 1) {
         return '昨天' + hourMinuteString;
-      } else if (diffDay === -2) {
+      } else if (diffDay === 2) {
         return '前天' + hourMinuteString;
-      } else if (isSameYear(time, Date.now())) {
-        return moment(time).format('MM月DD日') + timeFormat(time);
+      } else if (isSameYear(time, now)) {
+        return time.format('MM月DD日') + hourMinuteString;
       }else {
-        return moment(time).format('YYYY年MM月DD日') + timeFormat(time);
+        return time.format('YYYY年MM月DD日') + hourMinuteString;
       }
     },
     pickerArray() {
