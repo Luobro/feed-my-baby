@@ -17,14 +17,8 @@
     .opt-bar {
       display: flex;
       justify-content: flex-end;
+      align-items: center;
       height: 64rpx;
-    }
-    .time {
-      color: $TextColorTips;
-    }
-    .time-edit {
-      padding-left: 16rpx;
-      color: $LinkColorDefault
     }
     .amount {
       height: 128rpx;
@@ -54,11 +48,10 @@
   .back-panel
     .opt-bar
       slot
-    picker(
-      mode='time'
+    dateTimePicker(
+      :time='time'
+      @update:time='updateTime'
     )
-      text.time {{timeString}}
-      text.time-edit 设置
     input.amount(
       value='{{amount}}'
       bindinput='updateAmount'
@@ -107,25 +100,14 @@ wepy.component({
       default: '配方奶'
     }
   },
-  data: {
-  },
+  data: {},
   computed: {
     timeString() {
       return this.$utils.moment(this.time).format('MM月DD日ahh:mm')
     }
   },
   watch: {
-    time(newVal) {
-      this.$emit('time-changed', newVal);
-    },
-    remark(newVal) {
-      this.$emit('remark-changed', newVal);
-    },
-    type(newVal) {
-      console.log('type-changed', newVal);
-      
-      this.$emit('type-changed', newVal);
-    }
+
   },
   methods: {
     updateAmount(e) {
@@ -139,9 +121,14 @@ wepy.component({
     updateType(value) {
       this.$emit('update:type', value);
     },
+    updateTime(value) {
+      console.log('optPanel:update:time', value);
+      
+      this.$emit('update:time', value);
+    },
     triggerShow() {
       this.$emit('trigger:show');
-    }
+    },
   },
   attached() {
   }
@@ -150,7 +137,8 @@ wepy.component({
 <config>
 {
   usingComponents: {
-    'typeSelector': '~@/components/typeSelector'
+    'typeSelector': '~@/components/typeSelector',
+    'dateTimePicker': '~@/components/dateTimePicker'
   }
 }
 </config>

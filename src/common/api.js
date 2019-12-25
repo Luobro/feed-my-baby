@@ -95,3 +95,4 @@ export async function deleteRecord(id) {
     .doc(id)
     .remove();
 }
+

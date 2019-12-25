@@ -96,11 +96,16 @@ wepy.component({
         .reduce((acc, cur) => +acc + +cur, 0);
     },
     dateString() {
-      if(this.date) {
-        const [year, month, day] = this.date.split(',');
-        return `${year}年${month}月${day}日`
+      if(!this.date) {
+        return '载入中...';
       }
-      return '载入中...';
+      const [year, month, day] = this.date.split(',');
+      const thisYear = new Date().getFullYear();
+      if (Number(year) !== thisYear) {
+        return `${year}年${month}月${day}日`;
+      }
+      
+      return `${month}月${day}日`;
     }
   },
   methods: {

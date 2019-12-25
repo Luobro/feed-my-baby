@@ -50,4 +50,8 @@ export const getDateScope = (...args) => {
   return getDateScope(year, month, day)
 }
 
+export function generateArray(length) {
+  return [...Array(length).keys()].map(x => x+1);
+}
+
 export { moment }

@@ -1,0 +1,129 @@
+<style lang="scss">
+@import '~@/style/style.scss';
+.time {
+  color: $TextColorTips;
+}
+.time-edit {
+  padding-left: 16rpx;
+  color: $LinkColorDefault;
+}
+</style>
+<template lang="pug">
+picker(
+  mode='multiSelector'
+  range='{{pickerArray}}'
+  value='{{pickerArrayIndex}}'
+  bindchange='pickerChange'
+  bindcolumnchange='pickerColumnChange'
+)
+  text.time {{timeString}}
+  //- text.time(v-for='index in [1,2,3,4,5,6]') {{pickerArray[index][pickerArrayIndex[index]]}}
+  text.time-edit 设置
+</template>
+<script>
+import wepy from '@wepy/core';
+wepy.component({
+  props: {
+    time: {
+      type: Number,
+      default: 0,
+    }
+  },
+  data: {
+    selectTime: 0,
+  },
+  computed: {
+    timeString() {
+      const { moment, timeFormat } = this.$utils;
+      const { time } = this;
+      const diffDay = moment(time).diff(moment(new Date()), 'days');
+      const hourMinuteString = timeFormat(time);
+      const isSameYear = (time1, time2) => new Date(time1).getFullYear() === new Date(time2).getFullYear();
+      if(diffDay === 0) {
+        return hourMinuteString;
+      } else if (diffDay === -1) {
+        return '昨天' + hourMinuteString;
+      } else if (diffDay === -2) {
+        return '前天' + hourMinuteString;
+      } else if (isSameYear(time, Date.now())) {
+        return moment(time).format('MM月DD日') + timeFormat(time);
+      }else {
+        return moment(time).format('YYYY年MM月DD日') + timeFormat(time);
+      }
+    },
+    pickerArray() {
+      const moment = this.$utils.moment;
+      const generateArray = this.$utils.generateArray;
+      const thisYear = moment(Date.now()).year();
+      const time = moment(this.selectTime || Date.now());
+
+      const yearArray = generateArray(10).map(({}, index) => (thisYear - index) + '年').reverse();
+      const monthArray = generateArray(12).map(x => x + '月');
+      const dayArray = generateArray(time.daysInMonth()).map(x => x + '日');
+      const hourArray = [0, ...generateArray(23)].map(x => (String(x).length > 1?String(x):'0'+x) + '时');
+      const minuteArray = [0, ...generateArray(59)].map(x => (String(x).length > 1?String(x):'0'+x) + '分');
+
+      const timeString = time.format('YYYY,MM,DD,a,hh,mm');
+      const timeArray = timeString.split(',')
+      
+      
+      return [yearArray, monthArray, dayArray, hourArray, minuteArray];
+    },
+    pickerArrayIndex() {
+      const moment = this.$utils.moment;
+      const thisYear = moment(Date.now()).year();
+      const time = moment(this.selectTime || Date.now());
+      const [ year, $month, day, hour, minute ] = time.toArray();
+      const yearArrayLength = this.pickerArray[0].length;
+      
+      const yearIndex = yearArrayLength - (thisYear - year) - 1;
+      const monthIndex = $month;
+      const dayIndex = day - 1;
+      const hourIndex = hour;
+      const minuteIndex = minute;
+
+      return [ yearIndex, monthIndex, dayIndex, hourIndex, minuteIndex ];
+    }
+  },
+  methods: {
+    calculateTime(arrayIndex){
+      const moment = this.$utils.moment;
+      const [ $year, $month, $day, hour, minute ] = arrayIndex;
+
+      const thisYear = moment(Date.now()).year();
+      const yearArrayLength = this.pickerArray[0].length;
+      const year = thisYear - (yearArrayLength - $year) + 1;
+      const day = $day + 1;
+      
+      const time = moment([year, $month, day, hour, minute]).valueOf();
+      return time;
+    },
+    pickerChange(e) {
+      const time = this.calculateTime(e.$wx.detail.value);
+      this.$emit('update:time', time);
+    },
+    pickerColumnChange(e) {
+      const arrayIndex = [...this.pickerArrayIndex]; // 浅拷贝出来
+      const { column, value } = e.$wx.detail;
+      arrayIndex[column] = value;
+      
+      let time = this.calculateTime(arrayIndex);
+      let i = 30;
+      while (time !== time && i > 0) {
+        arrayIndex[2] = arrayIndex[2]-1;
+        time = this.calculateTime(arrayIndex);
+        i--; // 预防死循环
+      }
+      this.selectTime = time;
+    }
+  },
+  attached() {
+    this.selectTime = this.time;
+  }
+});
+</script>
+<config>
+{
+  usingComponents: {}
+}
+</config>

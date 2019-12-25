@@ -1,5 +1,16 @@
 <style lang="scss">
 @import '~@/style/style.scss';
+.btn{
+  color: $ColorPrimary;
+  line-height: 64rpx;
+  font-size: 42rpx;
+  font-weight: bold;
+  margin-left: 24rpx;
+}
+.delete {
+  line-height: 64rpx;
+  color: $TextColorTips;
+}
 </style>
 <template lang="pug">
 optPanel(
@@ -14,7 +25,7 @@ optPanel(
   @update:type='updateType'
   @trigger:show='triggerShow'
 )
-  div 删除
+  .delete(@tap='deleteRecord') 删除
   .btn(@tap='editRecord') 修改
 </template>
 <script>
@@ -24,7 +35,7 @@ wepy.component({
   mixins: [optPanelOwner],
   props: {},
   data: {
-    show: true,
+    show: false,
     // time: '',
     // amount: null,
     // remark: null, 
@@ -46,7 +57,14 @@ wepy.component({
     async editRecord() {
       const { id, time, amount, remark, type } = this;
       const result = await this.$api.updateRecord({ id, time, amount, remark, type });
-      console.log('editRecord', result);
+      console.log('editRecord', { id, time, amount, remark, type }, result);
+      this.$bus.$emit('refresh:list');
+      this.triggerShow();
+    },
+    async deleteRecord() {
+      const { id } = this;
+      const result = await this.$api.deleteRecord(id);
+      console.log('deleteRecord', result);
       this.$bus.$emit('refresh:list');
       this.triggerShow();
     }
