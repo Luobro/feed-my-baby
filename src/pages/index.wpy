@@ -50,12 +50,11 @@ wepy.page({
   onPageScroll(event) {
     this.scrollTop = event.scrollTop;
   },
-  async onPullDownRefresh() {
-    // const recordListCom = this.$children.find(
-    //   com => com.$is === 'components/recordList'
-    // );
-    // await recordListCom.loadData();
-    // wx.stopPullDownRefresh( )
+  onShareAppMessage() {
+    return {
+      title: '来用我这个新小程序看看',
+      imageUrl: '/images/cover.jpg'
+    }
   }
 });
 </script>

@@ -13,6 +13,7 @@ module.exports = {
     aliasFields: ['wepy', 'weapp'],
     modules: ['node_modules']
   },
+  static: 'src/images',
   compilers: {
     pug: {},
     sass: {},
