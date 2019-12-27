@@ -1,11 +1,12 @@
 <style lang="scss">
-@import "~@/style/style.scss";
+@import '~@/style/style.scss';
 .type-list {
+  margin-top: 32rpx;
   display: flex;
-  .type-item{
+  .type-item {
     box-sizing: border-box;
     height: 64rpx;
-    font-size:24rpx;
+    font-size: 24rpx;
     line-height: 64rpx;
     border: 2rpx solid $LineColorDark;
     border-radius: 32rpx;
@@ -13,46 +14,43 @@
     margin-right: 18rpx;
     color: $TextColorTips;
   }
-  .isSelected{
+  .isSelected {
     color: $ColorPrimary;
     border-color: $ColorPrimary;
   }
 }
 </style>
 <template lang="pug">
-  .type-list
-    .type-item(
-      v-for='type in types'
-      class="{{type == selected ? 'isSelected' : ''}}"
-      @tap='changeType'
-      data-type="{{type}}"
-    ) {{type}}
+.type-list
+  .type-item(
+    v-for='type in types'
+    class="{{type == selected ? 'isSelected' : ''}}"
+    @tap='changeType'
+    data-type="{{type}}"
+  ) {{type}}
 </template>
 <script>
 import wepy from '@wepy/core';
 wepy.component({
-  props: ['selected'],
-  data: {
-    types: [
-      '配方奶',
-      '瓶喂母乳',
-      '亲喂母乳',
-    ],
-    // selected: '配方奶',
+  props: {
+    selected: {
+      type: String,
+      default: '配方奶'
+    },
+    types: {
+      type: Array,
+      default: ['配方奶', '母乳']
+    }
   },
+  data: {},
   methods: {
     changeType(event) {
       const { type } = event.currentTarget.dataset;
-      this.selected = type;
+      this.$emit('update:type', type);
     }
   },
-  watch: {
-    selected(newVal, oldVal) {
-      this.$emit('update:type', newVal)
-    }
-  },
-  detached() {
-  }
+  watch: {},
+  detached() {}
 });
 </script>
 <config>

@@ -36,19 +36,24 @@ export default {
       const result = await api.addRecord(record);
       
       record._id = result._id;
+      
       commit('editRecord', { index, record });
-
+      wx.setStorageSync('list', state.list);
+      
       wx.showToast({
         title: '添加成功', //提示的内容,
         duration: 2000, //延迟时间,
         mask: false, //显示透明蒙层，防止触摸穿透,
       });
+
+      const app = getApp();
+      app.$wepy.$bus.$emit('refresh:list'); // 不知道为啥界面上绑定的数据没更新，这边再广播一次。
     },
     async editRecord({ commit, state }, { index, record }) {
       commit('editRecord', { index, record });
       wx.setStorageSync('list', state.list);
-
       const result = await api.updateRecord(record);
+
       wx.showToast({
         title: '编辑成功', //提示的内容,
         duration: 2000, //延迟时间,
@@ -58,7 +63,6 @@ export default {
     async removeRecord({ commit, state }, { index, id }) {
       commit('removeRecord', index);
       wx.setStorageSync('list', state.list);
-
       const result = await api.deleteRecord(id);
 
       wx.showToast({

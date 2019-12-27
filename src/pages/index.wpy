@@ -30,12 +30,8 @@ page {
   recordList(:scrollTop.sync='scrollTop')
   .foot
   .btn-container
-    .add(@tap='triggerAddPanel') 添加记录
-  addPanel(
-    :show='addPanelShow'
-    @trigger-show='triggerAddPanel'
-  )
-  editPanel
+    .add(@tap='openPanel') 添加记录
+  panel
 </template>
   
 <script>
@@ -49,6 +45,40 @@ wepy.page({
   methods: {
     triggerAddPanel() {
       this.$bus.$emit('trigger:addPanel');
+    },
+    openPanel() {
+      wx.showActionSheet({
+        itemList: ['喂奶瓶', '哺乳', '换尿布', '睡觉'],
+        success: res => {
+          const { tapIndex } = res;
+          console.log(tapIndex);
+          let cate;
+          switch (tapIndex) {
+            case 0:
+              cate = '喂奶瓶';
+              break;
+            case 1:
+              cate = '哺乳';
+              break;
+            case 2:
+              cate = '换尿布';
+              break;
+            case 3:
+              cate = '睡觉';
+              break;
+            default: 
+              cate = '喂奶瓶';
+          }
+          console.log(tapIndex,cate);
+          
+          this.$bus.$emit('open:panel', {
+            opt: 'add',
+            cate,
+            record: {},
+          })
+        }
+      })
+
     }
   },
   onLoad() {},
@@ -68,8 +98,7 @@ wepy.page({
   navigationBarTitleText: '🍼喂奶记录',
   usingComponents: {
     'recordList': '~@/components/recordList',
-    'addPanel': '~@/components/addPanel',
-    'editPanel': '~@/components/editPanel'
+    'panel': '~@/components/panel'
   },
   enablePullDownRefresh: false
 }

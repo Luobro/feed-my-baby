@@ -1,0 +1,63 @@
+<style lang="scss">
+@import '~@/style/style.scss';
+.amount {
+  height: 128rpx;
+  font-size: 64rpx;
+  padding-top: 16rpx;
+}
+.input-placeholder {
+  color: $TextColorTips;
+}
+</style>
+<template lang="pug">
+input.amount(
+  wx:if='{{isShow}}'
+  value='{{amount}}'
+  bindinput='updateAmount'
+  type='number'
+  placeholder='{{placeholder}}'
+  placeholder-class='input-placeholder'
+  maxlength='3'
+  adjust-position
+  focus
+)
+</template>
+<script>
+import wepy from '@wepy/core';
+wepy.component({
+  props: ['cate', 'amount', 'show'],
+  data: {},
+  computed: {
+    isShow() {
+      if (!this.show) return false;
+      switch (this.cate) {
+        case '换尿布':
+          return false;
+        default:
+          return true;
+      }
+    },
+    placeholder() {
+      switch (this.cate) {
+        case '喂奶瓶':
+          return '输入毫升数';
+        case '哺乳':
+          return '输入分钟数';
+        case '睡觉':
+          return '输入小时数';
+        default:
+          return '输入数值';
+      }
+    }
+  },
+  methods: {
+    updateAmount(e) {
+      const { value } = e.$wx.detail;
+      this.$emit('update:amount', value)
+    }
+  },
+});
+</script>
+<config>
+{}
+</config>

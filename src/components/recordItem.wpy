@@ -72,8 +72,10 @@
   .left
     image.icon(src="/images/naipingmuying.png")
   .right
-    .desc {{info.type}}
-    .amount {{info.amount}}毫升
+    .desc 
+      text {{info.cate}}
+      text(v-if='info.type')  - {{info.type}}
+    .amount(v-if='info.amount') {{info.amount}}{{unit}}
   .remark(v-if='info.remark') {{info.remark}}
 </template>
 
@@ -96,11 +98,32 @@ wepy.component({
   computed: {
     formatedTime() {
       return timeFormat(this.time);
+    },
+    unit() {
+      switch (this.info.cate) {
+        case '喂奶瓶':
+          return '毫升';
+        case '哺乳':
+          return '分钟';
+        case '睡觉':
+          return '小时';
+        default:
+          return '';
+      }
     }
   },
   methods: {
     tapRecordItem() {
-      this.$bus.$emit('trigger:editPanel', this.info);
+      console.log('tapRecordItem', this.info);
+
+      const cate = this.info.cate;
+      const record = Object.assign({}, this.info);
+      this.$bus.$emit('refresh:list')
+      this.$bus.$emit('open:panel', {
+        opt: 'edit',
+        cate,
+        record,
+      });
     }
   },
   created() {},

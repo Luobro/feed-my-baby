@@ -20,9 +20,9 @@
       v-for='records in list'
       :date='records.yearMonthDay'
       :records='records.data'
-      :scrollTop.sync='scrollTop'
+      :scrollTop='scrollTop'
     )
-  .endCircle
+  .endCircle(v-if='list.length')
   .foot
 </template>
 <script>
@@ -70,43 +70,18 @@ wepy.component({
   computed: {
     list() {
       const rawRecords = this.$store.state.list;
-
       const list = spliteList(rawRecords);
       return list;
     }
   },
   methods: {
-    async loadData() {
-      const { page, hasMore } = this;
-      if (!hasMore) return;
-      const data = (await getAllRecord(page)) || [];
-      if (data.length < 20) this.hasMore = false;
-      if (page === 1) {
-        this.rawRecords = data;
-      } else {
-        this.rawRecords = this.rawRecords.concat(data);
-      }
-      this.page = page + 1;
-      wx.nextTick(() => {
-        wx.pageScrollTo({
-          scrollTop: 5000000,
-          // selector: '.foot',
-          duration: 0,
-        });
-      });
-    },
-    async reFresh() {
+    reFresh() {
       this.list; // 触发计算属性计算
-
-      // this.page = 1;
-      // this.hasMore = true;
-      // this.loadData();
     }
   },
   attached() {
     this.$bus.$on('refresh:list', this.reFresh.bind(this));
     this.$bus.$on('init-success', this.reFresh.bind(this));
-    // this.loadData();
 
     wx.nextTick(() => {
       wx.pageScrollTo({
