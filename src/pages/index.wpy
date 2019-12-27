@@ -45,7 +45,6 @@ wepy.page({
   data: {
     scrollTop: 0,
     addPanelShow: false,
-
   },
   methods: {
     triggerAddPanel() {

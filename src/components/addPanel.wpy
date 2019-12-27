@@ -21,7 +21,7 @@ optPanel(
   @update:type='updateType'
   @trigger:show='triggerShow'
 )
-  .btn(@tap='addRecord') 添加
+  addOpt(@tap:add='addRecord')
 </template>
 <script>
 import wepy from '@wepy/core';
@@ -71,11 +71,9 @@ wepy.component({
       this.show = !this.show;
     }
   },
-  created() {},
   attached() {
     this.$bus.$on('trigger:addPanel', this.triggerShow.bind(this))
   },
-  ready() {}
 });
 </script>
 <config>
@@ -83,6 +81,7 @@ wepy.component({
   usingComponents: {
     'optPanel': '~@/components/optPanel',
     'typeSelector': '~@/components/typeSelector',
+    'addOpt': '~@/components/addOpt',
   }
 }
 </config>

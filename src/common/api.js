@@ -64,24 +64,26 @@ export async function getRecordList(page = 1) {
   return data;
 }
 
-export async function addRecord({ time, type = '配方奶', amount = 100, remark = '' }) {
+export async function addRecord({ time, type='', amount=1, cate='', remark = '' }) {
   return await db.collection('record').add({
     data: {
       time,
       type,
       amount,
       remark,
+      cate,
     }
   })
 }
 
-export async function updateRecord({ _id, time, type = '', amount = 1, remark = '' }) {
+export async function updateRecord({ _id, time, type, amount, cate, remark = '' }) {
   return await db.collection('record')
     .doc(_id)
     .update({
       data: {
         time,
         type,
+        cate,
         amount,
         remark,
       }

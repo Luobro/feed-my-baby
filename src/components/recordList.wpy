@@ -3,6 +3,13 @@
   display: flex;
   flex-direction: column-reverse;
 }
+.endCircle{
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 22rpx;
+  border: 4rpx solid #D5D1CB; 
+  margin-left: 91rpx;
+}
 .foot {
   height: 20rpx;
 }
@@ -15,6 +22,7 @@
       :records='records.data'
       :scrollTop.sync='scrollTop'
     )
+  .endCircle
   .foot
 </template>
 <script>
@@ -97,11 +105,12 @@ wepy.component({
   },
   attached() {
     this.$bus.$on('refresh:list', this.reFresh.bind(this));
+    this.$bus.$on('init-success', this.reFresh.bind(this));
     // this.loadData();
 
     wx.nextTick(() => {
       wx.pageScrollTo({
-        scrollTop: 5000000,
+        scrollTop: 500000000,
         // selector: '.foot',
         duration: 0
       });

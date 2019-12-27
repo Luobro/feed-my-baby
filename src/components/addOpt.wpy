@@ -1,0 +1,29 @@
+<style lang="scss">
+@import '~@/style/style.scss';
+.btn{
+  color: $ColorPrimary;
+  line-height: 64rpx;
+  font-size: 42rpx;
+  font-weight: bold;
+  margin-left: 24rpx;
+}
+</style>
+<template lang="pug">
+.btn(@tap='addRecord') 添加
+</template>
+<script>
+import wepy from '@wepy/core';
+wepy.component({
+  props: {},
+  data: {},
+  computed: {},
+  methods: {
+    addRecord() {
+      this.$emit('tap:add')
+    }
+  },
+});
+</script>
+<config>
+{}
+</config>

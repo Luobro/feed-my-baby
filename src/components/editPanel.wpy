@@ -105,7 +105,6 @@ wepy.component({
   attached() {
     this.$bus.$on('trigger:editPanel', this.triggerShow.bind(this))
   },
-  ready() {}
 });
 </script>
 <config>

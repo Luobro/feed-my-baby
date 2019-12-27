@@ -21,8 +21,10 @@ wepy.app({
     async syncData() {
       const list = await common.api.getAllRecord();
       wx.setStorageSync('list', list);
-    
-      this.$store.dispatch('init'); // 跟云同步后，再使出话一次
+      console.log('syncData success');
+      
+      this.$store.dispatch('init'); // 跟云同步后，再初始化一次
+      this.$bus.$emit('init-success')
     }
   },
   onLaunch() {

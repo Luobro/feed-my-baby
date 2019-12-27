@@ -12,7 +12,6 @@
   "author": "罗彦鹏 <rockinges@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@vant/weapp": "^1.0.1",
     "@wepy/core": "^2.0.0-alpha.9",
     "@wepy/x": "^2.0.3",
     "miniprogram-slide-view": "0.0.3",
