@@ -21,7 +21,8 @@ moment.locale('zh-cn', {
     } else {
       return '深夜';
     }
-  }
+  },
+  weekdays: ['星期天','星期一','星期二','星期三','星期四','星期五','星期六'],
 });
 
 export const timeFormat = date => moment(date).format('a hh:mm');

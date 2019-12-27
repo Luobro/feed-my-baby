@@ -14,8 +14,8 @@
     color: $TextColorTips;
   }
   .isSelected{
-    color: red;
-    border-color: red;
+    color: $ColorPrimary;
+    border-color: $ColorPrimary;
   }
 }
 </style>

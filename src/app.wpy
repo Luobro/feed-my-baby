@@ -13,37 +13,18 @@ const initCloud = function() {
     traceUser: true
   });
 };
-const syncData = async function() {
-  const spliteList = data => {
-    return data
-      .map(record => {
-        record.yearMonthDay = common.utils.getYearMonthDay(record.time).toString();
-        return record;
-      })
-      .reduce((result, current) => {
-        const existed = result.map(x => x.yearMonthDay);
-        const yearMonthDay = current.yearMonthDay;
-        const index = existed.indexOf(yearMonthDay);
-
-        if (index === -1) {
-          result.push({
-            yearMonthDay,
-            data: [current]
-          });
-        } else {
-          result[index].data.push(current);
-        }
-
-        return result;
-      }, []);
-  };
-  const list = await common.api.getAllRecord();
-  wx.setStorageSync('list', list);
-};
 
 wepy.use(Vuex);
 
 wepy.app({
+  methods: {
+    async syncData() {
+      const list = await common.api.getAllRecord();
+      wx.setStorageSync('list', list);
+    
+      this.$store.dispatch('init'); // 跟云同步后，再使出话一次
+    }
+  },
   onLaunch() {
     const p = Object.getPrototypeOf;
     const root = p(p(this));
@@ -58,13 +39,8 @@ wepy.app({
 
     store.dispatch('init');
     initCloud();
-    syncData()
+    this.syncData();
   },
-  async syncData() {
-    const list = await common.api.getAllRecord();
-    wx.setStorageSync('list', list);
-    this.$store.dispatch('init'); // 跟云同步后，再使出话一次
-  }
 });
 </script>
 <config>
@@ -73,10 +49,11 @@ wepy.app({
     'pages/index'
   ],
   window: {
+    backgroundColor: '#ED5E93',
     backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#fff',
+    navigationBarBackgroundColor: '#ED5E93',
     navigationBarTitleText: 'WeChat',
-    navigationBarTextStyle: 'black'
+    navigationBarTextStyle: 'white',
   },
   usingComponents: {
   }

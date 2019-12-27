@@ -42,10 +42,11 @@ wepy.component({
   methods: {
     async addRecord() {
       let { amount, remark, type, time } = this;
+      amount = Number(amount);
       if (!amount) {
         wx.showToast({
           icon: 'none',
-          title: '数量还没填哦～'
+          title: '数量输入有误～'
         });
         return;
       }

@@ -61,7 +61,18 @@ wepy.component({
       this.show = !this.show;
     },
     async editRecord() {
-      const { time, amount, remark, type, _id, recordIndex } = this;
+      let { time, amount, remark, type, _id, recordIndex } = this;
+      amount = Number(amount);
+      if (!amount) {
+        wx.showToast({
+          icon: 'none',
+          title: '数量输入有误～'
+        });
+        return;
+      }
+      if (!remark) {
+        remark = '';
+      }
       const record = { time, amount, remark, type, _id };
       this.$store.dispatch('editRecord', { index: recordIndex, record } );
       this.$bus.$emit('refresh:list');

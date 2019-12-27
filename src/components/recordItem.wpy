@@ -1,58 +1,80 @@
 <style lang='scss'>
 @import '~@/style/style.scss';
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
 .container {
   box-sizing: border-box;
-  padding: 32rpx;
-  display: flex;
-  justify-content: space-between;
-  .left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  position: relative;
+  margin: {
+    top: 32rpx;
+    bottom: 32rpx;
+  };
+  padding: {
+    left: 104rpx;
+    right: 32rpx;
+  };
+  display: grid;
+  grid-column-gap: 24rpx;
+  grid-template-columns: 56rpx auto;
+  grid-template-rows: auto auto;
+  .time {
+    position: absolute;
+    z-index: 1;
+    width: 144rpx;
+    height: 56rpx;
+    font-size: 24rpx;
+    font-weight: bold;
+    line-height: 56rpx;
+    text-align: center;
+    background-color: $Hightlight;
+    border-radius: 28rpx;
+    left: -72rpx;
   }
+  .left {
+    grid-row-start: span 2;
+    .icon {
+      width: 56rpx;
+      height: 56rpx;
+      margin-right: 16rpx;
+    }
+  }
+
   .right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    .top {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      .type {
-        font-size: 24rpx;
-        color: $TextColorTips;
-      }
-      .amount {
-        display: flex;
-        font-size: 42rpx;
-        line-height: 42rpx;
-      }
-      .unit {
-        font-size: 24rpx;
-        color: $TextColorTips;
-      }
+    @include flex-column;
+    flex-grow: 1;
+    .desc {
+      font-size: 32rpx;
+      line-height: 56rpx;
+      color: $TextColorTitle;
     }
-    .bottom {
-      margin-top: 16rpx;
-      font-size: 28rpx;
+    .amount {
       color: $TextColorDesc;
-      padding: 24rpx;
-      background-color: $ActiveMaskWhite;
-      border-radius: 32rpx;
+      font-size: 28rpx;
     }
+  }
+  .remark {
+    margin-top: 16rpx;
+    font-size: 28rpx;
+    color: $TextColorDesc;
+    padding: 24rpx;
+    background-color: $TextColorInverse;
+    border-radius: 16rpx;
+    box-shadow: 0 6px 30px 0 rgba(0,0,0,.1);
+    word-break: break-all;
   }
 }
 </style>
 <template lang="pug">
 .container(@tap='tapRecordItem')
+  .time {{formatedTime}}
   .left
-    .time {{formatedTime}}
+    image.icon(src="/images/naipingmuying.png")
   .right
-    .top
-      .amount {{info.amount}}
-      .unit 毫升
-      .type {{info.type}}
-    .bottom(v-if='info.remark') {{info.remark}}
+    .desc {{info.type}}
+    .amount {{info.amount}}毫升
+  .remark(v-if='info.remark') {{info.remark}}
 </template>
 
 <script>

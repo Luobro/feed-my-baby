@@ -1,6 +1,7 @@
 // color
-$ColorPrimary: #FA5151;
+$ColorPrimary: #ED5E93;
 $ColorWarn: #FA5151;
+$Hightlight: #EFDDEC;
 
 // active mask
 $ActiveMaskWhite:rgba(0,0,0,.05);
@@ -8,12 +9,13 @@ $ActiveMaskColored:rgba(0,0,0,.1);
 $ActiveMaskBlack:rgba(0,0,0,.15);
 
 // link
-$LinkColorDefault: #576B95;
+$LinkColorDefault: #00C9C8;
 
 // background
-$BgColorDefault: #EDEDED;
+$BgColorDefault: #FFF4F9;
 $BgColorPrimary: #F7F7F7;
-$BgColorActive: #ECECEC;
+$BgColorActive: #FFEBF1;
+
 
 // line
 $LineColorLight: rgba(0,0,0,.1);
@@ -24,4 +26,5 @@ $TextColorTitle: rgba(0,0,0,.9);
 $TextColorDesc: rgba(0,0,0,.5);
 $TextColorTips: rgba(0,0,0,.3);
 $TextColorWarn: $ColorWarn;
+$TextColorInverse: #FFF5F9;
 

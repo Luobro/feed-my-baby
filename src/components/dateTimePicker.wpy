@@ -5,7 +5,7 @@
 }
 .time-edit {
   padding-left: 16rpx;
-  color: $LinkColorDefault;
+  color: $ColorPrimary;
 }
 </style>
 <template lang="pug">

@@ -4,29 +4,19 @@
   box-sizing: border-box;
   width: 100%;
   height: 120rpx;
-  background-color: white;
+  background-color: $ColorPrimary;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12rpx 24rpx;
-  border: 1px solid $LineColorLight;
-  .date {
-    font-size: 32rpx;
-    font-weight: bold;
-    color: $TextColorTitle;
-  }
-  .total {
-    font-size: 28rpx;
-    color: $TextColorTitle;
-    .total-number {
-      color: $ColorPrimary;
-    }
-  }
+  color: $TextColorInverse;
+  font-weight: bold;
+  font-size: 32rpx;
 }
 .fixed {
   position: fixed;
   top: 0;
-  border-top-color: rgba(0, 0, 0, 0);
+  z-index: 2;
 }
 .space-holder{
   height: 120rpx;
@@ -34,13 +24,16 @@
 .list-wrapper{
   display: flex;
   flex-direction: column-reverse;
+  margin-left: 104rpx;
+  padding: 32rpx 0rpx;
+  border-left: 4rpx solid #D5D1CB;
 }
 </style>
 <template lang="pug">
   .wrapper
     .title(:class="{'fixed': isFixed}")
       .date {{dateString}}
-      .total 合计 <text class="total-number">{{total}}</text> 毫升
+      .total 共 {{total}} 毫升
     div(:class="{'space-holder': isFixed}")
     .list-wrapper
       recordItem.recordItem(
@@ -100,13 +93,14 @@ wepy.component({
         return '载入中...';
       }
       const [year, month, day] = this.date.split(',');
+      const time = this.$utils.moment([year, month-1, day]);
+      
       const thisYear = new Date().getFullYear();
       if (Number(year) !== thisYear) {
-        return `${year}年${month}月${day}日`;
+        return time.format("YYYY年MM月DD日 dddd");
       }
       
-      return `${month}月${day}日`;
-    }
+      return time.format("MM月DD日 dddd");}
   },
   methods: {
 
