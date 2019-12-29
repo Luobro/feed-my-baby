@@ -148,9 +148,22 @@ wepy.component({
         });
         return;
       }
+      
+      const isSafe = await this.$api.isContentSafe(remark);
+      console.log('isSafe', isSafe);
+      if (!isSafe) {
+        wx.showToast({
+          title: '存在疑似违规内容', //提示的内容,
+          icon: 'none', //图标,
+          duration: 2000, //延迟时间,
+        })
+        return;
+      }
+      
 
       const record = { cate, amount, remark, type, time };
       const index = this.$store.state.list.length;
+
       this.$store.dispatch('addRecord', { index, record });
       this.$bus.$emit('refresh:list');
       this.closePanel();
@@ -167,6 +180,17 @@ wepy.component({
         return;
       }
 
+      
+      const isSafe = await this.$api.isContentSafe(remark);
+      console.log('isSafe', isSafe);
+      if (!isSafe) {
+        wx.showToast({
+          title: '存在疑似违规内容', //提示的内容,
+          icon: 'none', //图标,
+          duration: 2000, //延迟时间,
+        });
+        return;
+      }
       const record = { cate, time, amount, remark, type, _id };
       this.$store.dispatch('editRecord', { index: recordIndex, record });
       this.$bus.$emit('refresh:list');

@@ -21,15 +21,15 @@ wepy.app({
     async syncData() {
       const list = await common.api.getAllRecord();
       wx.setStorageSync('list', list);
-      
+
       this.$store.dispatch('init'); // 跟云同步后，再初始化一次
-      this.$bus.$emit('init-success')
+      this.$bus.$emit('init-success');
     }
   },
   onLaunch() {
     const p = Object.getPrototypeOf;
     const root = p(p(this));
-    
+
     const store = new Vuex.Store(storeConfig);
     root.$common = common;
     root.$api = common.api;
@@ -41,7 +41,7 @@ wepy.app({
     store.dispatch('init');
     initCloud();
     this.syncData();
-  },
+  }
 });
 </script>
 <config>

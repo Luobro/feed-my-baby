@@ -96,3 +96,15 @@ export async function deleteRecord(_id) {
     .remove();
 }
 
+export async function isContentSafe(content) {
+  content = String(content) || '1';
+  const { result } = await wx.cloud.callFunction({
+    name: 'msgSecCheck',
+    data: { content },
+  });
+
+  return result;
+}
+
+
+
