@@ -14,12 +14,11 @@ input.amount(
   wx:if='{{isShow}}'
   value='{{amount}}'
   bindinput='updateAmount'
-  type='number'
+  type='digit'
   placeholder='{{placeholder}}'
   placeholder-class='input-placeholder'
   maxlength='3'
   adjust-position
-  focus
 )
 </template>
 <script>

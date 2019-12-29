@@ -1,5 +1,5 @@
 <style lang="scss">
-@import "~@/style/style.scss";
+@import '~@/style/style.scss';
 page {
   background-color: $BgColorDefault;
 }
@@ -13,7 +13,7 @@ page {
   bottom: 100rpx;
   width: 100%;
   .add {
-    box-shadow: 0 6px 30px 0 rgba(0,0,0,.1);
+    box-shadow: 0 6px 30px 0 rgba(0, 0, 0, 0.1);
     font-weight: bold;
     height: 120rpx;
     width: 240rpx;
@@ -24,6 +24,30 @@ page {
     text-align: center;
   }
 }
+.empty {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .guide {
+    margin: {
+      // top: -88rpx;
+      bottom: 88rpx;
+    }
+    text-align: center;
+    width: 75%;
+    font-size: 28rpx;
+    line-height: 64rpx;
+    color: $TextColorTips;
+  }
+  .smile {
+    color: $TextColorTips;
+    font-size: 88rpx;
+  }
+}
 </style>
 
 <template lang="pug">
@@ -31,6 +55,9 @@ page {
   .foot
   .btn-container
     .add(@tap='openPanel') 添加记录
+  .empty(v-if='isEmpty')
+    text.guide 这款工具为她而做，也希望能帮到你 :-)\n——某新手奶爸
+    //- .smile ^_^
   panel
 </template>
   
@@ -40,7 +67,19 @@ import store from '@/store';
 wepy.page({
   data: {
     scrollTop: 0,
-    addPanelShow: false,
+    addPanelShow: false
+    // isEmpty: false,
+  },
+  computed: {
+    today() {
+      const now = this.$utils.moment(new Date());
+      return now.format('YYYY年MM月DD日dddd');
+    },
+    isEmpty() {
+      const isEmpty = this.$store.state.list.length === 0;
+      this.$wx.setData({ isEmpty });
+      return isEmpty;
+    }
   },
   methods: {
     triggerAddPanel() {
@@ -51,7 +90,6 @@ wepy.page({
         itemList: ['喂奶瓶', '哺乳', '换尿布', '睡觉'],
         success: res => {
           const { tapIndex } = res;
-          console.log(tapIndex);
           let cate;
           switch (tapIndex) {
             case 0:
@@ -66,36 +104,46 @@ wepy.page({
             case 3:
               cate = '睡觉';
               break;
-            default: 
+            default:
               cate = '喂奶瓶';
           }
-          console.log(tapIndex,cate);
-          
+
           this.$bus.$emit('open:panel', {
             opt: 'add',
             cate,
-            record: {},
-          })
+            record: {}
+          });
         }
-      })
-
+      });
     }
   },
-  onLoad() {},
+  onLoad() {
+    // if(this.$store.state.list.length === 0) this.isEmpty = true;
+    this.$bus.$on('refresh:list', () => {
+      this.isEmpty; // 触发更新
+    });
+    wx.nextTick(() =>
+      wx.pageScrollTo({
+        scrollTop: 500000000,
+        // selector: '.foot',
+        duration: 0
+      })
+    );
+  },
   onPageScroll(event) {
     this.scrollTop = event.scrollTop;
   },
   onShareAppMessage() {
     return {
-      title: '来用我这个新小程序看看',
+      title: '新生儿喂养记录',
       imageUrl: '/images/cover.jpg'
-    }
+    };
   }
 });
 </script>
 <config>
 {
-  navigationBarTitleText: '🍼喂奶记录',
+  navigationBarTitleText: '👶喂养记录',
   usingComponents: {
     'recordList': '~@/components/recordList',
     'panel': '~@/components/panel'

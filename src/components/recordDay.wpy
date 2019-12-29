@@ -10,8 +10,17 @@
   align-items: center;
   padding: 12rpx 24rpx;
   color: $ColorPrimary;
-  font-weight: bold;
-  font-size: 32rpx;
+  .date {
+    font-weight: bold;
+    font-size: 32rpx;
+  }
+  .total {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto auto;
+    column-gap: 16rpx;
+    font-size: 24rpx;
+  }
 }
 .fixed {
   position: fixed;
@@ -33,7 +42,11 @@
   .wrapper
     .title(:class="{'fixed': isFixed}")
       .date {{dateString}}
-      .total 共 {{total}} 毫升
+      .total 
+        div 🍼{{bottleTotal}}ml 
+        div 🤱{{breastTotal}}分钟 
+        div 🧷{{diaperTotal}}次 
+        div 🛌{{sleepTotal}}小时
     div(:class="{'space-holder': isFixed}")
     .list-wrapper
       recordItem.recordItem(
@@ -82,8 +95,26 @@ wepy.component({
     }
   },
   computed: {
-    total() {
+    bottleTotal() {
       return this.records
+        .filter(record => record.cate === '喂奶瓶')
+        .map(record => record.amount)
+        .reduce((acc, cur) => +acc + +cur, 0);
+    },
+    breastTotal() {
+      return this.records
+        .filter(record => record.cate === '哺乳')
+        .map(record => record.amount)
+        .reduce((acc, cur) => +acc + +cur, 0);
+    },
+    diaperTotal() {
+      return this.records
+        .filter(record => record.cate === '换尿布')
+        .length
+    },
+    sleepTotal() {
+      return this.records
+        .filter(record => record.cate === '睡觉')
         .map(record => record.amount)
         .reduce((acc, cur) => +acc + +cur, 0);
     },

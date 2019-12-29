@@ -77,8 +77,8 @@
       .close-btn(@tap='closePanel') x
       .opt-btn
         .btn(v-if='isAdd' @tap='addRecord') 添加
-        .delete(v-if='!isAdd' @tap='editRecord') 删除
-        .btn(v-if='!isAdd' @tap='deleteRecord') 保存
+        .delete(v-if='!isAdd' @tap='deleteRecord') 删除
+        .btn(v-if='!isAdd' @tap='editRecord') 保存
     dateTimePicker(
       :time='time'
       @update:time='updateTime'
@@ -114,7 +114,7 @@ wepy.component({
     cate: '喂奶瓶',
     time: Date.now(),
     amount: null,
-    type: '配方奶',
+    type: '',
     remark: ''
   },
   computed: {
@@ -194,24 +194,28 @@ wepy.component({
 
       this.$store.dispatch('removeRecord', { index: recordIndex, id: _id });
       this.$bus.$emit('refresh:list');
-      this.triggerShow();
+      this.closePanel();
     },
     openPanel({ opt = 'add', cate = '喂奶瓶', record = {} }) {
-      console.log(opt, cate, record);
+      
       let selected;
       switch (cate) {
         case '喂奶瓶':
           selected = '配方奶';
+          break;
         case '哺乳':
           selected = '双侧';
+          break;
         case '换尿布':
           selected = '有嘘嘘';
+          break;
         default:
-          selected = '配方奶';
+          selected = '';
       }
+      console.log(opt, cate, record, selected);
       this.opt = opt;
       this.cate = cate;
-      this.selected = selected;
+      this.type = selected;
       Object.assign(this, record);
       this.show = true;
     },
@@ -219,7 +223,7 @@ wepy.component({
       this.cate = '奶瓶喂养';
       this.time = Date.now();
       this.amount = null;
-      this.type = '配方奶';
+      this.type = '';
       this.remark = '';
       this.show = false;
       wx.hideKeyboard({
@@ -228,8 +232,6 @@ wepy.component({
       });
     },
     updateAmount(value) {
-      console.log(value);
-      
       this.amount = value;
     },
     updateRemark(e) {

@@ -37,6 +37,8 @@
     .icon {
       width: 56rpx;
       height: 56rpx;
+      font-size: 56rpx;
+      line-height: 56rpx;
       margin-right: 16rpx;
     }
   }
@@ -70,7 +72,8 @@
 .container(@tap='tapRecordItem')
   .time {{formatedTime}}
   .left
-    image.icon(src="/images/naipingmuying.png")
+    .icon {{icon}}
+    //- image.icon(src="/images/naipingmuying.png")
   .right
     .desc 
       text {{info.cate}}
@@ -96,6 +99,20 @@ wepy.component({
   },
   data: {},
   computed: {
+    icon() {
+      switch (this.info.cate) {
+        case '喂奶瓶':
+          return '🍼';
+        case '哺乳':
+          return '🤱';
+        case '换尿布':
+          return '🧷'
+        case '睡觉':
+          return '🛌';
+        default:
+          return ' ';
+      }
+    },
     formatedTime() {
       return timeFormat(this.time);
     },

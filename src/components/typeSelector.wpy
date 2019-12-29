@@ -35,11 +35,11 @@ wepy.component({
   props: {
     selected: {
       type: String,
-      default: '配方奶'
+      default: ''
     },
     types: {
       type: Array,
-      default: ['配方奶', '母乳']
+      default: []
     }
   },
   data: {},

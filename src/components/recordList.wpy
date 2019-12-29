@@ -82,14 +82,6 @@ wepy.component({
   attached() {
     this.$bus.$on('refresh:list', this.reFresh.bind(this));
     this.$bus.$on('init-success', this.reFresh.bind(this));
-
-    wx.nextTick(() => {
-      wx.pageScrollTo({
-        scrollTop: 500000000,
-        // selector: '.foot',
-        duration: 0
-      });
-    });
   }
 });
 </script>
