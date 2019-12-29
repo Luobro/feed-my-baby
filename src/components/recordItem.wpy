@@ -61,7 +61,7 @@
     font-size: 28rpx;
     color: $TextColorDesc;
     padding: 24rpx;
-    background-color: $TextColorInverse;
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 16rpx;
     box-shadow: 0 6px 30px 0 rgba(0,0,0,.1);
     word-break: break-all;
