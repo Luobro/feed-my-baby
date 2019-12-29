@@ -2,7 +2,7 @@
 
 ## 简介
 
-由于孩子是混合喂养，记录她吃多吃少变成了宝妈的一项日常工作。之前她都是用笔记本记下来，为了让她的记录更方便，私心上也作为我的一个练手项目，于是有了这个小程序。
+由于孩子是混合喂养，记录她吃多吃少变成了宝妈的一项日常工作。之前都是用笔记本记，为了让她更方便，私心上也作为一个练手项目，于是写了这个小程序。
 
 ## 特色
 本项目基于 [WePY2](https://wepyjs.github.io/wepy-docs/2.x/) 框架进行开发，使用了 [pug](https://pugjs.org/api/getting-started.html) 和 [scss](https://sass-lang.com/documentation/syntax) 。同时对页面元素都进行了组件化封装，EventBus 和 Vuex 也用上了。联网方面直接使用微信的[云开发](https://developers.weixin.qq.com/minigame/dev/wxcloud/basis/getting-started.html)。
