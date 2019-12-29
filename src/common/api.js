@@ -7,7 +7,7 @@ try {
 } catch (error) {
   if (error.errCode === -1) {
     wx.cloud.init({
-      env: 'release-r3j3z',
+      env: 'release-r3j3z', // 替换成自己的云开发环境
       traceUser: true
     });
     db = wx.cloud.database();
